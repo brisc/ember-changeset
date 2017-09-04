@@ -361,6 +361,29 @@ export function changeset(obj, validateFn = defaultValidatorFn, validationMap = 
     },
 
     /**
+     * Remove all errors
+     * 
+     * @public
+     */
+    clearErrors() {
+      set(this, ERRORS, {});
+      this._notifyVirtualProperties();
+    },
+
+    /**
+     * Copy errors from ember data model to changeset
+     *
+     * @public
+     * @param model
+     * @param changeset
+     */
+    syncErrors (model, changeset) {
+      get(model, 'errors').forEach(({attribute, message}) => {
+        changeset.pushErrors(attribute, message);
+      })
+    },
+
+    /**
      * Creates a snapshot of the changeset's errors and changes.
      *
      * @public
